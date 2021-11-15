@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".FinalPage">
+
+    <TextView
+        android:id="@+id/final_heading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Thank you for signing up"
+        android:textColor="#152238"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.15" />
+
+    <TextView
+        android:id="@+id/final_heading2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="User likes to eat"
+        android:textColor="#808080"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="@+id/final_heading"
+        app:layout_constraintStart_toStartOf="@+id/final_heading"
+        app:layout_constraintTop_toBottomOf="@+id/final_heading" />
+
+    <TextView
+        android:id="@+id/dish1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text= "TextView"
+        android:textColor="#808080"
+        app:layout_constraintEnd_toEndOf="@+id/final_heading2"
+        app:layout_constraintStart_toStartOf="@+id/final_heading2"
+        app:layout_constraintTop_toBottomOf="@+id/final_heading2" />
+
+    <TextView
+        android:id="@+id/dish2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="TextView"
+        android:textColor="#808080"
+        app:layout_constraintEnd_toEndOf="@+id/dish1"
+        app:layout_constraintStart_toStartOf="@+id/dish1"
+        app:layout_constraintTop_toBottomOf="@+id/dish1" />
+
+    <TextView
+        android:id="@+id/dish3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="TextView"
+        android:textColor="#808080"
+        app:layout_constraintEnd_toEndOf="@+id/dish2"
+        app:layout_constraintStart_toStartOf="@+id/dish2"
+        app:layout_constraintTop_toBottomOf="@+id/dish2" />
+
+    <TextView
+        android:id="@+id/dish4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="TextView"
+        android:textColor="#808080"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@+id/dish3"
+        app:layout_constraintStart_toStartOf="@+id/dish3"
+        app:layout_constraintTop_toBottomOf="@+id/dish3" />
+
+    <TextView
+        android:id="@+id/dish5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="TextView"
+        android:textColor="#808080"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@+id/dish4"
+        app:layout_constraintStart_toStartOf="@+id/dish4"
+        app:layout_constraintTop_toBottomOf="@+id/dish4" />
+</androidx.constraintlayout.widget.ConstraintLayout>
