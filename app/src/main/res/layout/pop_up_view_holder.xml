@@ -2,46 +2,45 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white">
+    android:background="#F5F5F5">
 
     <ImageView
-        android:id="@+id/recycler_image"
+        android:id="@+id/pop_up_recycler_image"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_marginStart="35dp"
-        android:layout_marginLeft="35dp"
-        android:layout_marginTop="20dp"
         android:background="@drawable/border"
         android:padding="7dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
-        android:id="@+id/recycler_text"
+        android:id="@+id/pop_up_recycler_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="TextView"
         android:textColor="@color/navy_blue"
         android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/recycler_image"
-        app:layout_constraintStart_toStartOf="@+id/recycler_image"
-        app:layout_constraintTop_toBottomOf="@+id/recycler_image" />
+        android:layout_gravity="center"
+        app:layout_constraintEnd_toEndOf="@+id/pop_up_recycler_image"
+        app:layout_constraintStart_toStartOf="@+id/pop_up_recycler_image"
+        app:layout_constraintTop_toBottomOf="@+id/pop_up_recycler_image" />
 
     <ImageView
-        android:id="@+id/selected"
+        android:id="@+id/pop_up_selected"
         android:layout_width="10dp"
         android:layout_height="10dp"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
         android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/recycler_image"
+        android:layout_gravity="center"
+        app:layout_constraintEnd_toEndOf="@+id/pop_up_recycler_image"
+        app:layout_constraintTop_toTopOf="@+id/pop_up_recycler_image"
         app:srcCompat="@drawable/selection_icon" />
 </androidx.constraintlayout.widget.ConstraintLayout>

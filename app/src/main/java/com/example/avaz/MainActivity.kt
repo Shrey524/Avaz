@@ -1,7 +1,11 @@
 package com.example.avaz
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Parcelable
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
@@ -13,8 +17,10 @@ class MainActivity : AppCompatActivity() {
 
 	private lateinit var adapter: RecyclerViewAdapter
 
+	private val sharedPrefFile = "sharedPreference"
+
 	// Creating a List for default dishes
-	private fun createList(): List<Data> {
+	private fun createDefaultList(): List<Data> {
 		val data = Data("apple", R.drawable.apple, false)
 		val data1 = Data("burger", R.drawable.burger, false)
 		val data2 = Data("cake", R.drawable.cake, false)
@@ -41,6 +47,30 @@ class MainActivity : AppCompatActivity() {
 		return dataList
 	}
 
+	private fun createNewList(sharedPreferences: SharedPreferences): List<Data> {
+		val data = Data("idli", R.drawable.idli, false)
+
+		var arrayList : ArrayList<Data> = ArrayList()
+		arrayList.add(data)
+		Log.v("createNewList","newListBeingCreated")
+		val check = sharedPreferences.getBoolean("check", true)
+		if(!check){
+			// receiving the List of Data
+			val bundle = intent.extras
+			arrayList = bundle!!.getParcelableArrayList<Parcelable>("popUpList") as ArrayList<Data>
+			Log.v("check running",arrayList.toString())
+			runOnUiThread { adapter.notifyDataSetChanged() }
+		}
+
+
+		for(items in arrayList){
+			items.selected = false
+		}
+
+		return arrayList
+	}
+
+
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_main)
@@ -49,14 +79,31 @@ class MainActivity : AppCompatActivity() {
 		var actionBar: ActionBar? = supportActionBar
 		actionBar?.hide()
 
-		// declaring RecyclerView
-		var recyclerDataList : List<Data> = createList()
-		adapter = RecyclerViewAdapter(this, recyclerDataList)
+		//creating a default list
+		var recyclerDataList1 : List<Data> = createDefaultList()
+
+		// sharedPrefs
+		val sharedPreferences: SharedPreferences = this.getSharedPreferences(
+			sharedPrefFile,
+			Context.MODE_PRIVATE
+		)
+
+		// declaring default RecyclerView
+		adapter = RecyclerViewAdapter(this, recyclerDataList1)
 		val mLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 		dishes.layoutManager = mLayoutManager
 		dishes.itemAnimator = DefaultItemAnimator()
 		dishes.setHasFixedSize(true)
 		dishes.adapter = adapter
+
+		// declaring New RecyclerView
+		var recyclerDataList2 : List<Data> = createNewList(sharedPreferences)
+		adapter = RecyclerViewAdapter(this, recyclerDataList2)
+		val mLayoutManager2 = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+		dishes2.layoutManager = mLayoutManager2
+		dishes2.itemAnimator = DefaultItemAnimator()
+		dishes2.setHasFixedSize(true)
+		dishes2.adapter = adapter
 
 		// onClickListener for popUp activity
 		add.setOnClickListener {
@@ -69,11 +116,18 @@ class MainActivity : AppCompatActivity() {
 
 			val selectedList: ArrayList<Data> = ArrayList<Data>()
 
-			for(item in recyclerDataList ){
+			for(item in recyclerDataList1 ){
 				if(item.selected){
 					selectedList.add(item)
 				}
 			}
+
+			for(item in recyclerDataList2 ){
+				if(item.selected){
+					selectedList.add(item)
+				}
+			}
+
 			if(selectedList.size>=3){
 				if(selectedList.size<6){
 
@@ -101,5 +155,17 @@ class MainActivity : AppCompatActivity() {
 				).show()
 			}
 		}
+	}
+
+	override fun onStop() {
+		super.onStop()
+		val sharedPreferences: SharedPreferences =
+			this.getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
+		val editor: SharedPreferences.Editor = sharedPreferences.edit()
+		var check: Boolean = true
+		Log.v("list_check", check.toString())
+		editor.putBoolean("check", check)
+		editor.apply()
+		editor.commit()
 	}
 }
