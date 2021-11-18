@@ -1,4 +1,4 @@
-package com.example.avaz
+package com.example.avaz.activities
 
 import android.content.Context
 import android.content.Intent
@@ -6,16 +6,23 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.avaz.*
+import com.example.avaz.adapters.RecyclerView2Adapter
+import com.example.avaz.adapters.RecyclerViewAdapter
+import com.example.avaz.models.Data
+import com.example.avaz.models.SortedApiData
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
 	private lateinit var adapter: RecyclerViewAdapter
+	private lateinit var adapter2: RecyclerView2Adapter
 
 	private val sharedPrefFile = "sharedPreference"
 
@@ -47,26 +54,26 @@ class MainActivity : AppCompatActivity() {
 		return dataList
 	}
 
-	private fun createNewList(sharedPreferences: SharedPreferences): List<Data> {
-		val data = Data("idli", R.drawable.idli, false)
+	//Fetching data from the popUp Activity
+	private fun createNewList(sharedPreferences: SharedPreferences): ArrayList<SortedApiData> {
 
-		var arrayList : ArrayList<Data> = ArrayList()
-		arrayList.add(data)
-		Log.v("createNewList","newListBeingCreated")
+		var arrayList : ArrayList<SortedApiData> = ArrayList()
+
 		val check = sharedPreferences.getBoolean("check", true)
 		if(!check){
 			// receiving the List of Data
 			val bundle = intent.extras
-			arrayList = bundle!!.getParcelableArrayList<Parcelable>("popUpList") as ArrayList<Data>
+			arrayList = bundle!!.getParcelableArrayList<Parcelable>("popUpList") as ArrayList<SortedApiData>
 			Log.v("check running",arrayList.toString())
-			runOnUiThread { adapter.notifyDataSetChanged() }
+			runOnUiThread { adapter.notifyDataSetChanged()
+				dishes2.visibility = View.VISIBLE
+				adapter2 = RecyclerView2Adapter(this, arrayList)
+				val mLayoutManager2 = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+				dishes2.layoutManager = mLayoutManager2
+				dishes2.itemAnimator = DefaultItemAnimator()
+				dishes2.setHasFixedSize(true)
+				dishes2.adapter = adapter}
 		}
-
-
-		for(items in arrayList){
-			items.selected = false
-		}
-
 		return arrayList
 	}
 
@@ -97,13 +104,8 @@ class MainActivity : AppCompatActivity() {
 		dishes.adapter = adapter
 
 		// declaring New RecyclerView
-		var recyclerDataList2 : List<Data> = createNewList(sharedPreferences)
-		adapter = RecyclerViewAdapter(this, recyclerDataList2)
-		val mLayoutManager2 = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-		dishes2.layoutManager = mLayoutManager2
-		dishes2.itemAnimator = DefaultItemAnimator()
-		dishes2.setHasFixedSize(true)
-		dishes2.adapter = adapter
+		var list : ArrayList<SortedApiData> = createNewList(sharedPreferences)
+
 
 		// onClickListener for popUp activity
 		add.setOnClickListener {
@@ -114,17 +116,18 @@ class MainActivity : AppCompatActivity() {
 		// onClickListener for final activity
 		continue_button.setOnClickListener {
 
-			val selectedList: ArrayList<Data> = ArrayList<Data>()
+			//creating a final list for the final activity
+			val selectedList: ArrayList<String> = ArrayList<String>()
 
 			for(item in recyclerDataList1 ){
 				if(item.selected){
-					selectedList.add(item)
+					selectedList.add(item.name)
 				}
 			}
 
-			for(item in recyclerDataList2 ){
+			for(item in list ){
 				if(item.selected){
-					selectedList.add(item)
+					selectedList.add(item.name)
 				}
 			}
 
@@ -136,7 +139,7 @@ class MainActivity : AppCompatActivity() {
 					// passing ParcelableArrayList to the final arrayList
 					val intent = Intent(this, FinalPage::class.java)
 					val bundle = Bundle()
-					bundle.putParcelableArrayList("mylist", selectedList)
+					bundle.putStringArrayList("mylist", selectedList)
 					intent.putExtras(bundle)
 					startActivity(intent)
 
@@ -159,8 +162,8 @@ class MainActivity : AppCompatActivity() {
 
 	override fun onStop() {
 		super.onStop()
-		val sharedPreferences: SharedPreferences =
-			this.getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
+		// updating shared prefs when activity stops
+		val sharedPreferences: SharedPreferences = this.getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
 		val editor: SharedPreferences.Editor = sharedPreferences.edit()
 		var check: Boolean = true
 		Log.v("list_check", check.toString())

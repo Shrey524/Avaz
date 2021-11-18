@@ -1,4 +1,4 @@
-package com.example.avaz
+package com.example.avaz.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.avaz.R
+import com.example.avaz.models.Data
 import kotlinx.android.synthetic.main.view_holder.view.*
 
 class RecyclerViewAdapter(context: Context, list: List<Data>) : RecyclerView.Adapter<RecyclerView.ViewHolder>()  {

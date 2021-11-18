@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/pop_up_background"
-    tools:context=".PopPage">
+    tools:context=".activities.PopPage">
 
     <TextView
         android:id="@+id/Save"
@@ -54,8 +54,9 @@
         android:id="@+id/popUprecycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="30dp"
         android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

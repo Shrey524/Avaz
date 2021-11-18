@@ -1,4 +1,4 @@
-package com.example.avaz
+package com.example.avaz.models
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
