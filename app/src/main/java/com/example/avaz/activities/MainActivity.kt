@@ -1,11 +1,7 @@
 package com.example.avaz.activities
 
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
-import android.os.Parcelable
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
@@ -13,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.avaz.*
+import com.example.avaz.Database.DatabaseHelper
 import com.example.avaz.adapters.RecyclerView2Adapter
 import com.example.avaz.adapters.RecyclerViewAdapter
 import com.example.avaz.models.Data
@@ -24,7 +21,7 @@ class MainActivity : AppCompatActivity() {
 	private lateinit var adapter: RecyclerViewAdapter
 	private lateinit var adapter2: RecyclerView2Adapter
 
-	private val sharedPrefFile = "sharedPreference"
+	val databaseHandler: DatabaseHelper = DatabaseHelper(this)
 
 	var recycler2List : ArrayList<SortedApiData> = ArrayList()
 
@@ -60,15 +57,14 @@ class MainActivity : AppCompatActivity() {
 	}
 
 	//Fetching data from the popUp Activity and creating the second recyclerView
-	private fun createRecyclerView2(sharedPreferences: SharedPreferences): ArrayList<SortedApiData> {
+	private fun createRecyclerView2(): ArrayList<SortedApiData> {
 
 		var arrayList : ArrayList<SortedApiData> = ArrayList()
 
-		val check = sharedPreferences.getBoolean("check", true)
-		if(!check){
+
+		if(databaseHandler.viewDishes().isNotEmpty()){
 			// receiving the List of Data
-			val bundle = intent.extras
-			arrayList = bundle!!.getParcelableArrayList<Parcelable>("popUpList") as ArrayList<SortedApiData>
+			arrayList = databaseHandler.viewDishes() as ArrayList<SortedApiData>
 
 			for(items in arrayList){
 				recycler2List.add(items)
@@ -94,11 +90,6 @@ class MainActivity : AppCompatActivity() {
 		var actionBar: ActionBar? = supportActionBar
 		actionBar?.hide()
 
-		// sharedPrefs
-		val sharedPreferences: SharedPreferences = this.getSharedPreferences(
-			sharedPrefFile,
-			Context.MODE_PRIVATE
-		)
 
 		// declaring default RecyclerView
 		adapter = RecyclerViewAdapter(this, recyclerDataList1)
@@ -109,7 +100,7 @@ class MainActivity : AppCompatActivity() {
 		dishes.adapter = adapter
 
 		//  Creating the 2nd RecyclerView
-		var list : ArrayList<SortedApiData> = createRecyclerView2(sharedPreferences)
+		var list : ArrayList<SortedApiData> = createRecyclerView2()
 
 
 		// onClickListener for popUp activity
@@ -141,7 +132,7 @@ class MainActivity : AppCompatActivity() {
 
 					Toast.makeText(this@MainActivity, "Welcome", Toast.LENGTH_LONG).show()
 
-					// passing ParcelableArrayList to the final arrayList
+					// passing ArrayList to the final arrayList
 					val intent = Intent(this, FinalPage::class.java)
 					val bundle = Bundle()
 					bundle.putStringArrayList("mylist", selectedList)
@@ -157,15 +148,4 @@ class MainActivity : AppCompatActivity() {
 		}
 	}
 
-	override fun onStop() {
-		super.onStop()
-		// updating shared prefs when activity stops
-		val sharedPreferences: SharedPreferences = this.getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
-		val editor: SharedPreferences.Editor = sharedPreferences.edit()
-		var check: Boolean = true
-		Log.v("list_check", check.toString())
-		editor.putBoolean("check", check)
-		editor.apply()
-		editor.commit()
-	}
 }

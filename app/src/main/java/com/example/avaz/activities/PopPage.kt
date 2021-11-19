@@ -1,11 +1,8 @@
 package com.example.avaz.activities
 
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
@@ -34,8 +31,6 @@ class PopPage : AppCompatActivity() {
 
 	private lateinit var adapter: PopUpAdapter
 
-	private val sharedPrefFile = "sharedPreference"
-
 	private val BaseUrl:String = "https://api.thenounproject.com/collection/"
 
 	var recyclerDataList : List<SortedApiData> = ArrayList()
@@ -45,12 +40,14 @@ class PopPage : AppCompatActivity() {
 
 		var imgList : List<IconsItem>? = data?.icons as List<IconsItem>?
 		val dataList : ArrayList<SortedApiData> = ArrayList()
+
 		if (imgList != null) {
 			for(items in imgList){
+
 				var img : String = items.previewUrl
 				var name : String = items.term
 
-				var sortedApiData : SortedApiData = SortedApiData(name, img, false)
+				var sortedApiData = SortedApiData(name, img, false)
 				dataList.add(sortedApiData)
 			}
 		}
@@ -84,7 +81,9 @@ class PopPage : AppCompatActivity() {
 			override fun onResponse(call: retrofit2.Call<ApiData?>, response: Response<ApiData?>) {
 				val data: ApiData? = response.body()
 				popUprecycler.visibility = View.VISIBLE
-
+				if(data == null){
+					Toast.makeText(this@PopPage, "Can't find any image", Toast.LENGTH_LONG).show()
+				}
 				//Creating the 2nd RecyclerView
 				recyclerDataList = createList(data)
 				adapter = PopUpAdapter(this@PopPage, recyclerDataList)
@@ -97,6 +96,7 @@ class PopPage : AppCompatActivity() {
 		})
 	}
 
+
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_pop_page)
@@ -107,7 +107,7 @@ class PopPage : AppCompatActivity() {
 		actionBar?.hide()
 
 		// setting layout params for the popUp Activity
-		val dm : DisplayMetrics = DisplayMetrics()
+		val dm = DisplayMetrics()
 		windowManager.defaultDisplay.getMetrics(dm)
 
 		val width : Int = dm.widthPixels
@@ -142,26 +142,9 @@ class PopPage : AppCompatActivity() {
 				items.selected = false
 			}
 
-			// passing the list of selected list back to mainActivity
-			val intent = Intent(this, MainActivity::class.java)
-			val bundle = Bundle()
-			bundle.putParcelableArrayList("popUpList", selectedList)
-			intent.putExtras(bundle)
 
-			//updating shared prefs
-			val sharedPreferences: SharedPreferences = this.getSharedPreferences(
-				sharedPrefFile,
-				Context.MODE_PRIVATE
-			)
-			val editor: SharedPreferences.Editor =  sharedPreferences.edit()
-			if(selectedList.size >= 1){
-				var check : Boolean = false
-				Log.v("list_check", check.toString())
-				editor.putBoolean("check", check)
-				editor.apply()
-				editor.commit()
-			}
 			//going back to the MainActivity
+			val intent = Intent(this, MainActivity::class.java)
 			startActivity(intent)
 
 		}

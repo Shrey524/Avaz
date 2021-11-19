@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.avaz.Database.DatabaseHelper
 import com.example.avaz.R
 import com.example.avaz.models.SortedApiData
 import kotlinx.android.synthetic.main.pop_up_view_holder.view.*
@@ -15,6 +16,7 @@ import kotlinx.android.synthetic.main.pop_up_view_holder.view.*
 class PopUpAdapter(context: Context, list: List<SortedApiData>) : RecyclerView.Adapter<RecyclerView.ViewHolder>()  {
     private val context: Context = context
     var list: List<SortedApiData> = list
+    val databaseHandler = DatabaseHelper(context)
 
     private inner class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)  {
         var image: ImageView = itemView.findViewById(R.id.pop_up_recycler_image)
@@ -31,13 +33,16 @@ class PopUpAdapter(context: Context, list: List<SortedApiData>) : RecyclerView.A
                 if(selected.visibility == View.INVISIBLE){
                     selected.visibility = View.VISIBLE
                     list[position].selected = true
+                    databaseHandler.addDish(list[position])
                 }else{
                     selected.visibility = View.INVISIBLE
                     list[position].selected = false
+                    databaseHandler.deleteDish(list[position])
                 }
             }
         }
     }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view: View = LayoutInflater.from(context).inflate(R.layout.pop_up_view_holder, parent, false)
