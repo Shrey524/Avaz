@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -39,6 +40,7 @@ class PopPage : AppCompatActivity() {
 
 	var recyclerDataList : List<SortedApiData> = ArrayList()
 
+	// Creating a list from the api call which we can use the recyclerView
 	private fun createList(data: ApiData?): List<SortedApiData> {
 
 		var imgList : List<IconsItem>? = data?.icons as List<IconsItem>?
@@ -55,8 +57,8 @@ class PopPage : AppCompatActivity() {
 		return dataList
 	}
 
+	// function for apiCall which will create the recyclerView if there is a response
 	private fun apiCall(search: String) {
-
 
 		val consumer = OkHttpOAuthConsumer("9c6c751a78db41b9a8bec92ef28c7656", "3f302d7930a74c1db0304ce675d4d41b")
 		consumer.setTokenWithSecret("","")
@@ -76,22 +78,20 @@ class PopPage : AppCompatActivity() {
 
 		call?.enqueue(object : Callback<ApiData?> {
 			override fun onFailure(call: retrofit2.Call<ApiData?>, t: Throwable?) {
-				Log.v("retrofit", t.toString())
+				Toast.makeText(this@PopPage, "Failure in getting api response", Toast.LENGTH_LONG).show()
 			}
 
 			override fun onResponse(call: retrofit2.Call<ApiData?>, response: Response<ApiData?>) {
 				val data: ApiData? = response.body()
 				popUprecycler.visibility = View.VISIBLE
 
-				Log.v("retrofit", data.toString())
-
+				//Creating the 2nd RecyclerView
 				recyclerDataList = createList(data)
 				adapter = PopUpAdapter(this@PopPage, recyclerDataList)
 				popUprecycler.layoutManager = GridLayoutManager(applicationContext, 2)
 				popUprecycler.itemAnimator = DefaultItemAnimator()
 				popUprecycler.setHasFixedSize(true)
 				popUprecycler.adapter = adapter
-				Log.i("Shrey", "shit")
 
 			}
 		})
@@ -161,6 +161,7 @@ class PopPage : AppCompatActivity() {
 				editor.apply()
 				editor.commit()
 			}
+			//going back to the MainActivity
 			startActivity(intent)
 
 		}

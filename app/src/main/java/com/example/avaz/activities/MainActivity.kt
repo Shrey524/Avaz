@@ -59,8 +59,8 @@ class MainActivity : AppCompatActivity() {
 		return dataList
 	}
 
-	//Fetching data from the popUp Activity
-	private fun createNewList(sharedPreferences: SharedPreferences): ArrayList<SortedApiData> {
+	//Fetching data from the popUp Activity and creating the second recyclerView
+	private fun createRecyclerView2(sharedPreferences: SharedPreferences): ArrayList<SortedApiData> {
 
 		var arrayList : ArrayList<SortedApiData> = ArrayList()
 
@@ -108,8 +108,8 @@ class MainActivity : AppCompatActivity() {
 		dishes.setHasFixedSize(true)
 		dishes.adapter = adapter
 
-		// declaring New RecyclerView
-		var list : ArrayList<SortedApiData> = createNewList(sharedPreferences)
+		//  Creating the 2nd RecyclerView
+		var list : ArrayList<SortedApiData> = createRecyclerView2(sharedPreferences)
 
 
 		// onClickListener for popUp activity
@@ -149,18 +149,10 @@ class MainActivity : AppCompatActivity() {
 					startActivity(intent)
 
 				}else{
-					Toast.makeText(
-						this@MainActivity,
-						"You can't select more than 5 dishes",
-						Toast.LENGTH_LONG
-					).show()
+					Toast.makeText(this@MainActivity, "You can't select more than 5 dishes", Toast.LENGTH_LONG).show()
 				}
 			}else{
-				Toast.makeText(
-					this@MainActivity,
-					"You have to select more than 2 dishes",
-					Toast.LENGTH_LONG
-				).show()
+				Toast.makeText(this@MainActivity, "You have to select more than 2 dishes", Toast.LENGTH_LONG).show()
 			}
 		}
 	}

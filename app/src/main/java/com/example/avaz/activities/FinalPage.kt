@@ -9,7 +9,7 @@ import kotlinx.android.synthetic.main.activity_final_page.*
 
 class FinalPage : AppCompatActivity() {
 
-    // binding data to the views
+    // binding data to the TextViews
     private fun bindData(list: ArrayList<String>){
         dish1.text = list[0]
         dish2.text = list[1]
