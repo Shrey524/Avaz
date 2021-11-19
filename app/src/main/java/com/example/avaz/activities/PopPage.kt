@@ -35,7 +35,9 @@ class PopPage : AppCompatActivity() {
 
 	private val sharedPrefFile = "sharedPreference"
 
-	val BaseUrl:String = "https://api.thenounproject.com/collection/"
+	private val BaseUrl:String = "https://api.thenounproject.com/collection/"
+
+	var recyclerDataList : List<SortedApiData> = ArrayList()
 
 	private fun createList(data: ApiData?): List<SortedApiData> {
 
@@ -53,9 +55,8 @@ class PopPage : AppCompatActivity() {
 		return dataList
 	}
 
-	private fun apiCall(search: String): List<SortedApiData> {
+	private fun apiCall(search: String) {
 
-		var recyclerDataList: List<SortedApiData> = ArrayList<SortedApiData>()
 
 		val consumer = OkHttpOAuthConsumer("9c6c751a78db41b9a8bec92ef28c7656", "3f302d7930a74c1db0304ce675d4d41b")
 		consumer.setTokenWithSecret("","")
@@ -91,16 +92,15 @@ class PopPage : AppCompatActivity() {
 				popUprecycler.setHasFixedSize(true)
 				popUprecycler.adapter = adapter
 				Log.i("Shrey", "shit")
+
 			}
 		})
-		return recyclerDataList
 	}
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_pop_page)
 
-		var recyclerDataList : List<SortedApiData> = ArrayList()
 
 		//hiding actionBar
 		var actionBar: ActionBar? = supportActionBar
@@ -124,7 +124,7 @@ class PopPage : AppCompatActivity() {
 		// Searching dishes using retrofit
 		searchbar.setOnClickListener {
 			//recyclerView
-			recyclerDataList = apiCall(searchbar.text.toString())
+			apiCall(searchbar.text.toString())
 		}
 
 		Save.setOnClickListener {

@@ -4,8 +4,8 @@ import java.util.List;
 
 public class IconsItem{
 	private Sponsor sponsor;
-	private String uploaderId;
-	private String isActive;
+	private String uploader_id;
+	private String is_active;
 	private String nounjiFree;
 	private int year;
 	private String dateUploaded;
@@ -17,7 +17,7 @@ public class IconsItem{
 	private List<TagsItem> tags;
 	private String attributionPreviewUrl;
 	private String updatedAt;
-	private String previewUrl;
+	private String preview_url;
 	private Uploader uploader;
 	private String attribution;
 	private String previewUrl42;
@@ -33,11 +33,11 @@ public class IconsItem{
 	}
 
 	public String getUploaderId(){
-		return uploaderId;
+		return uploader_id;
 	}
 
 	public String getIsActive(){
-		return isActive;
+		return is_active;
 	}
 
 	public String getNounjiFree(){
@@ -85,7 +85,7 @@ public class IconsItem{
 	}
 
 	public String getPreviewUrl(){
-		return previewUrl;
+		return preview_url;
 	}
 
 	public Uploader getUploader(){

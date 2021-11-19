@@ -26,6 +26,11 @@ class MainActivity : AppCompatActivity() {
 
 	private val sharedPrefFile = "sharedPreference"
 
+	var recycler2List : ArrayList<SortedApiData> = ArrayList()
+
+	//creating a default list
+	var recyclerDataList1 : List<Data> = createDefaultList()
+
 	// Creating a List for default dishes
 	private fun createDefaultList(): List<Data> {
 		val data = Data("apple", R.drawable.apple, false)
@@ -64,15 +69,18 @@ class MainActivity : AppCompatActivity() {
 			// receiving the List of Data
 			val bundle = intent.extras
 			arrayList = bundle!!.getParcelableArrayList<Parcelable>("popUpList") as ArrayList<SortedApiData>
-			Log.v("check running",arrayList.toString())
-			runOnUiThread { adapter.notifyDataSetChanged()
+
+			for(items in arrayList){
+				recycler2List.add(items)
+			}
+
 				dishes2.visibility = View.VISIBLE
-				adapter2 = RecyclerView2Adapter(this, arrayList)
+				adapter2 = RecyclerView2Adapter(this, recycler2List)
 				val mLayoutManager2 = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 				dishes2.layoutManager = mLayoutManager2
 				dishes2.itemAnimator = DefaultItemAnimator()
 				dishes2.setHasFixedSize(true)
-				dishes2.adapter = adapter}
+				dishes2.adapter = adapter2
 		}
 		return arrayList
 	}
@@ -85,9 +93,6 @@ class MainActivity : AppCompatActivity() {
 		// hiding actionBar
 		var actionBar: ActionBar? = supportActionBar
 		actionBar?.hide()
-
-		//creating a default list
-		var recyclerDataList1 : List<Data> = createDefaultList()
 
 		// sharedPrefs
 		val sharedPreferences: SharedPreferences = this.getSharedPreferences(
